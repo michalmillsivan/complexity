@@ -1,74 +1,75 @@
-const queue = []
-let objectQueue = {}
-
-const generatorButton = document.querySelector("#generator")
-const numbers = document.querySelector("#number")
-const numberToDelete = document.querySelector("#number_to_delete")
-const delbtn = document.querySelector("#delete")
-const showLengthBtn = document.querySelector("#showLength")
-const lengthH2 = document.querySelector("#length")
-
-generatorButton.addEventListener("click", () => {
-    const getRandomNumber = (min, max) => {
-        min = Math.ceil(min)
-        max = Math.floor(max)
-        return Math.floor(Math.random() * (max - min)) + min
+// program to implement queue data structure
+class Queue {
+    constructor() {
+        this.items = {};
+        this.headIndex = 0;
+        this.tailIndex = 0;
     }
-    const randomNumber = getRandomNumber(0, 100)
-    // console.log(randomNumber)
 
-    add(randomNumber, queue)
-    objectQueue = Object.assign({}, queue)
-    // console.log(objectQueue)
-    // console.log(queue)
-    numbers.innerHTML = queue
-});
+    //adds a new element
+    enqueue(element) {
+        this.items[this.tailIndex] = element;
+        this.tailIndex++;
+    }
 
-delbtn.addEventListener("click", () => {
-    delbtn.addEventListener("click", () => {
-        const number = parseInt(numberToDelete.value);
-        if (isNaN(number)) return;
-        const originalLength = queue.length;
-        const occurrences = queue.reduce((acc, currentNumberInarray) => currentNumberInarray === number ? acc + 1 : acc, 0);
-        if (occurrences > 1) {
-            alert("The number appears more than once in the queue. Please specify which occurrence to delete.");
-        } else {
-            const newQueue = queue.filter(currentNumberInarray => currentNumberInarray !== number);
-            if (newQueue.length === originalLength) {
-                alert("The number you're trying to delete is not in the queue.");
-            } else {
-                objectQueue = Object.assign({}, newQueue);
-                console.log(objectQueue);
-                numbers.innerHTML = newQueue;
-            }
+    //removes an element from head of the queue
+    dequeue() {
+        let removedElement = this.items[this.headIndex];
+        delete this.items[this.headIndex];
+        this.headIndex++;
+        return removedElement;
+    }
+
+    //shows the head element of the  queue
+    peek() {
+        let peekElement = this.items[this.headIndex];
+        return peekElement;
+    }
+
+    //shows the number of items in queue
+    size() {
+        return this.tailIndex - this.headIndex;
+    }
+
+    //checks if queue is empty or not
+    isEmpty() {
+        if (this.tailIndex - this.headIndex == 0) {
+            return true;
         }
-    });
-
-})
-
-showLengthBtn.addEventListener("click", () => {
-    lengthH2.innerHTML = queue.length
-})
-
-function add(number, array) {
-    array.splice(findLocation(number, array), 0, number);
-    return array
-}
-
-function findLocation(number, array, start, end) {
-    start = start || 0;
-    end = end || array.length
-    for (let i = start; i < end; i++) {
-        if (array[i] > number)
-            return i;
+        else {
+            return false;
+        }
     }
-    return end;
-}
 
-const quantity = 15;
-
-for (let i = 1; i <= quantity; i++) {
-    const firefly = document.createElement('div');
-    firefly.classList.add('firefly');
-    document.body.appendChild(firefly);
+    //empty the queue
+    clear() {
+        this.items = {};
+        this.headIndex = 0;
+        this.tailIndex = 0;
+    }
 }
+let queue = new Queue();
+
+// add items to queue
+queue.enqueue(8);
+queue.enqueue(6);
+queue.enqueue(4);
+queue.enqueue(2);
+
+console.log("Queue after adding items: ");
+console.log(queue.items);
+
+// remove the first item
+queue.dequeue();
+
+console.log("Queue after deleting the first item:");
+console.log(queue.items);
+
+// show the first item
+console.log("First item of the queue = " + queue.peek());
+
+// empty the queue
+queue.clear();
+
+console.log("After clearing the queue: ");
+console.log(queue.items);
